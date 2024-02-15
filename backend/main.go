@@ -201,7 +201,6 @@ func (b blocksStatHandler) ServeHTTP(writer http.ResponseWriter, request *http.R
 			continue
 		}
 
-		// capacity := math.Round(float64(125-len(currentBlock)) / 125)
 		capacity, err := strconv.ParseFloat(fmt.Sprintf("%.2f", (float64(125-len(currentBlock))/125)*100), 64)
 
 		if err != nil {
