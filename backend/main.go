@@ -219,6 +219,9 @@ func (b blocksStatHandler) ServeHTTP(writer http.ResponseWriter, request *http.R
 		nonEmptyStacks := make(map[int]int)
 
 		for _, c := range currentBlock {
+			// the error here determines if the given timestamp is unix or "normal"
+			// this works because the unix time stamp can be converted to a simple integer,
+			// while the "normal" time stamp will fail
 			unixTimeMsec, err := strconv.ParseInt(c.ArrivedAt, 10, 64)
 
 			if err == nil {

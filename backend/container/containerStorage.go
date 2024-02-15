@@ -42,14 +42,6 @@ func (c *ContStore) Add(name string, container Container) error {
 	return nil
 }
 
-func (c *ContStore) GetById(id string) (Container, error) {
-	if val, ok := c.list[id]; ok {
-		return val, nil
-	}
-
-	return Container{}, NotFoundErr
-}
-
 func (c *ContStore) GetByBlockId(blockId int) ([]Container, error) {
 	var containers []Container
 
@@ -68,8 +60,4 @@ func (c *ContStore) GetByBlockId(blockId int) ([]Container, error) {
 
 func (c *ContStore) List() map[string]Container {
 	return c.list
-}
-
-func (c *ContStore) Remove(name string) {
-	delete(c.list, name)
 }
