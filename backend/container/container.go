@@ -1,7 +1,5 @@
 package container
 
-import "fmt"
-
 type Container struct {
 	Id        string "json:\"id\""
 	BlockId   int    "json:\"blockId\""
@@ -20,9 +18,4 @@ func NewContainer(id string, blockId int, bayNum int, stackNum int, tierNum int,
 		tierNum,
 		arrivedAt,
 	}
-}
-
-func (c *Container) ToString() string {
-	return fmt.Sprintf("Container<%s, %d, %d, %d, %d, %s>",
-		c.Id, c.BlockId, c.BayNum, c.StackNum, c.TierNum, c.ArrivedAt)
 }
