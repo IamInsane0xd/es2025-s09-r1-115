@@ -314,6 +314,6 @@ func main() {
 	mux.Handle("/api/blocks/stat/", &blocksStatHandler{})
 
 	if err := http.ListenAndServe(":3001", mux); err != nil {
-		return
+		panic(err)
 	}
 }
