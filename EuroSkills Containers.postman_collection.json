@@ -1,0 +1,90 @@
+{
+	"info": {
+		"_postman_id": "7f368597-ce35-461f-8f33-eb15104656ea",
+		"name": "EuroSkills Containers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32587308"
+	},
+	"item": [
+		{
+			"name": "CSV Import",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "container,block,bay,stack,tier,unixtime\nWKRE1092594,4,4,4,1,1704412800000\nCGXK0664256,1,1,3,1,1704412800000\nUKZM2157184,3,2,4,2,1704499200000\nZUKN0754509,4,4,5,2,1704499200000\nUOUO6930417,1,4,3,2,1704499200000\nDTOJ9251827,2,2,4,2,1704499200000\nBKZB5908110,1,2,4,2,1704499200000\nYNZC8660804,4,3,2,2,1704499200000\nYLRV1154262,1,5,3,2,1704585600000\nQKBI2083226,1,2,2,2,1704585600000\nOKJA6371722,3,3,4,2,1704585600000\nYHEF9302287,2,3,2,2,1704672000000\nIVFL7614580,1,1,3,2,1704672000000\nSPXA8466444,3,5,3,2,1704672000000\nXPTS4710353,4,4,3,2,1704672000000\nHGGA7596600,3,1,3,2,1704672000000\nBZXR1161550,4,3,4,2,1704672000000\nRYJL3552725,2,4,2,2,1704672000000\nEPAJ1621345,3,5,4,2,1704758400000\nVMIO9001550,4,2,3,2,1704758400000\nHSYM1074438,1,5,2,2,1704758400000\nOFFS4866828,4,4,4,2,1704758400000\nYOMW6691481,3,2,2,2,1704758400000\nAEJW7335202,2,2,2,2,1704758400000\nPHKF3732733,2,4,4,2,1704844800000\nGJRO1745948,2,5,3,2,1704844800000\nNWLQ8313847,1,3,4,2,1704844800000\nHHXC3874483,4,4,2,2,1704844800000\nUGNH3865042,4,5,4,2,1704844800000\nMMGF9561504,3,5,2,2,1704844800000\nCVZP1821978,4,1,4,2,1704844800000\nVXIL3929698,2,3,2,3,1704931200000\nREKJ6014441,4,5,4,3,1704931200000\nGLIB6632508,1,1,3,3,1705017600000\nLQML2133177,2,2,2,3,1705017600000\nRTPU3019377,3,2,4,3,1705017600000\nUPIL3269205,4,1,4,3,1705017600000\nVPET0154668,2,4,4,3,1705017600000\nRFGD0287927,3,1,3,3,1705017600000\nIYLW0747461,4,2,3,3,1705104000000\nGQVN4096789,4,4,2,1,1704240000000\nMVJA5910379,3,1,3,1,1704326400000\nYVOY9902889,2,3,2,1,1704499200000\nJIVA8444489,1,5,3,1,1704499200000\nAUMZ5365009,2,2,4,1,1704240000000",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/api/containers/import",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"containers",
+						"import"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON import",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"id\": \"XIQO1322541\",\n        \"blockId\": 3,\n        \"bayNum\": 5,\n        \"stackNum\": 3,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-13T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"WMCQ2222857\",\n        \"blockId\": 4,\n        \"bayNum\": 4,\n        \"stackNum\": 5,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-13T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"ZBQU8886437\",\n        \"blockId\": 4,\n        \"bayNum\": 3,\n        \"stackNum\": 2,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-13T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"UBNQ4149244\",\n        \"blockId\": 2,\n        \"bayNum\": 2,\n        \"stackNum\": 4,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-13T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"SNHW5603409\",\n        \"blockId\": 3,\n        \"bayNum\": 5,\n        \"stackNum\": 2,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-13T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"OZFD7284125\",\n        \"blockId\": 1,\n        \"bayNum\": 3,\n        \"stackNum\": 4,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-13T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"HWVB8740521\",\n        \"blockId\": 4,\n        \"bayNum\": 4,\n        \"stackNum\": 2,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-14T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"UPAF8897438\",\n        \"blockId\": 3,\n        \"bayNum\": 3,\n        \"stackNum\": 4,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-14T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"QXKP7979739\",\n        \"blockId\": 3,\n        \"bayNum\": 5,\n        \"stackNum\": 4,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-14T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"NPZF9494742\",\n        \"blockId\": 4,\n        \"bayNum\": 3,\n        \"stackNum\": 4,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-14T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"XHYL8268894\",\n        \"blockId\": 1,\n        \"bayNum\": 5,\n        \"stackNum\": 2,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-14T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"XMQG1014568\",\n        \"blockId\": 4,\n        \"bayNum\": 4,\n        \"stackNum\": 4,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-14T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"KTKZ3092209\",\n        \"blockId\": 1,\n        \"bayNum\": 4,\n        \"stackNum\": 3,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-14T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"XIFI4157721\",\n        \"blockId\": 4,\n        \"bayNum\": 4,\n        \"stackNum\": 3,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-15T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"ZOBN4846482\",\n        \"blockId\": 1,\n        \"bayNum\": 5,\n        \"stackNum\": 3,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-15T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"YMVS2497022\",\n        \"blockId\": 2,\n        \"bayNum\": 4,\n        \"stackNum\": 2,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-15T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"SNAZ6386446\",\n        \"blockId\": 4,\n        \"bayNum\": 4,\n        \"stackNum\": 4,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-16T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"PWWW7404723\",\n        \"blockId\": 3,\n        \"bayNum\": 3,\n        \"stackNum\": 4,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-17T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"UOLQ9694006\",\n        \"blockId\": 3,\n        \"bayNum\": 5,\n        \"stackNum\": 3,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-17T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"COJW8239287\",\n        \"blockId\": 1,\n        \"bayNum\": 5,\n        \"stackNum\": 3,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-17T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"FHDV1882683\",\n        \"blockId\": 4,\n        \"bayNum\": 5,\n        \"stackNum\": 4,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-17T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"PTPF9437203\",\n        \"blockId\": 2,\n        \"bayNum\": 4,\n        \"stackNum\": 4,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-18T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"TOTH8811278\",\n        \"blockId\": 1,\n        \"bayNum\": 4,\n        \"stackNum\": 3,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-18T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"BAXH1725439\",\n        \"blockId\": 1,\n        \"bayNum\": 1,\n        \"stackNum\": 3,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-19T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"GRGU1212552\",\n        \"blockId\": 3,\n        \"bayNum\": 1,\n        \"stackNum\": 3,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-19T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"FLPV8276813\",\n        \"blockId\": 4,\n        \"bayNum\": 1,\n        \"stackNum\": 4,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-20T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"NZFH9959909\",\n        \"blockId\": 4,\n        \"bayNum\": 4,\n        \"stackNum\": 2,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-20T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"JKDT2198287\",\n        \"blockId\": 2,\n        \"bayNum\": 2,\n        \"stackNum\": 4,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-20T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"CFWY4364557\",\n        \"blockId\": 1,\n        \"bayNum\": 5,\n        \"stackNum\": 2,\n        \"tierNum\": 4,\n        \"arrivedAt\": \"2024-01-20T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"VFFG5109433\",\n        \"blockId\": 2,\n        \"bayNum\": 4,\n        \"stackNum\": 4,\n        \"tierNum\": 5,\n        \"arrivedAt\": \"2024-01-21T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"XTSC5776971\",\n        \"blockId\": 2,\n        \"bayNum\": 2,\n        \"stackNum\": 4,\n        \"tierNum\": 5,\n        \"arrivedAt\": \"2024-01-24T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"BZCP4528947\",\n        \"blockId\": 4,\n        \"bayNum\": 4,\n        \"stackNum\": 4,\n        \"tierNum\": 5,\n        \"arrivedAt\": \"2024-01-25T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"BTOO9287979\",\n        \"blockId\": 4,\n        \"bayNum\": 1,\n        \"stackNum\": 4,\n        \"tierNum\": 1,\n        \"arrivedAt\": \"2024-01-05T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"KHTQ4797199\",\n        \"blockId\": 2,\n        \"bayNum\": 4,\n        \"stackNum\": 4,\n        \"tierNum\": 3,\n        \"arrivedAt\": \"2024-01-13T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"YHQI0151589\",\n        \"blockId\": 2,\n        \"bayNum\": 3,\n        \"stackNum\": 2,\n        \"tierNum\": 1,\n        \"arrivedAt\": \"2024-01-06T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"UEKP3858709\",\n        \"blockId\": 3,\n        \"bayNum\": 2,\n        \"stackNum\": 4,\n        \"tierNum\": 1,\n        \"arrivedAt\": \"2024-01-06T00:00:00.000Z\"\n    },\n    {\n        \"id\": \"CRDO5901359\",\n        \"blockId\": 4,\n        \"bayNum\": 1,\n        \"stackNum\": 4,\n        \"tierNum\": 2,\n        \"arrivedAt\": \"2024-01-11T00:00:00.000Z\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/api/containers",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"containers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get block stats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/api/blocks/stat",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"blocks",
+						"stat"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

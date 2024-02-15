@@ -131,8 +131,6 @@ func (c containersImportHandler) ServeHTTP(writer http.ResponseWriter, request *
 
 		arrivedAt := data[5]
 		cont := container.NewContainer(id, int(blockId), int(bayNum), int(stackNum), int(tierNum), arrivedAt)
-
-		fmt.Println(cont.ToString())
 		containers = append(containers, *cont)
 
 		if err := store.Add(id, *cont); err != nil {
