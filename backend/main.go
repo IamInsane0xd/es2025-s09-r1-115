@@ -164,7 +164,7 @@ func (c containersImportHandler) ServeHTTP(writer http.ResponseWriter, request *
 	}
 }
 
-type statResponse struct {
+type StatResponse struct {
 	BlockId           int     "json:\"blockId\""
 	Capacity          float64 "json:\"capacity\""
 	AverageAge        float64 "json:\"averageAge\""
@@ -176,8 +176,8 @@ type statResponse struct {
 }
 
 func NewStatResponse(blockId int, capacity float64, averageAge float64, oldestContainerId string,
-	newestContainerId string, emptyPositions int, emptyBays int, emptyStacks int) *statResponse {
-	return &statResponse{
+	newestContainerId string, emptyPositions int, emptyBays int, emptyStacks int) *StatResponse {
+	return &StatResponse{
 		blockId,
 		capacity,
 		averageAge,
@@ -192,7 +192,7 @@ func NewStatResponse(blockId int, capacity float64, averageAge float64, oldestCo
 type blocksStatHandler struct{}
 
 func (b blocksStatHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	var responses []statResponse
+	var responses []StatResponse
 
 	for blockId := 1; blockId <= 4; blockId++ {
 		currentBlock, err := store.GetByBlockId(blockId)
@@ -287,7 +287,7 @@ func (b blocksStatHandler) ServeHTTP(writer http.ResponseWriter, request *http.R
 	}
 }
 
-func InternalServerErrorHandler(writer http.ResponseWriter, request *http.Request) {
+func InternalServerErrorHandler(writer http.ResponseWriter, _ *http.Request) {
 	writer.WriteHeader(http.StatusInternalServerError)
 
 	if _, err := writer.Write([]byte("500 internal server error")); err != nil {
@@ -295,7 +295,7 @@ func InternalServerErrorHandler(writer http.ResponseWriter, request *http.Reques
 	}
 }
 
-func ForbiddenErrorHandler(writer http.ResponseWriter, request *http.Request) {
+func ForbiddenErrorHandler(writer http.ResponseWriter, _ *http.Request) {
 	writer.WriteHeader(http.StatusForbidden)
 
 	if _, err := writer.Write([]byte("403 forbidden")); err != nil {
