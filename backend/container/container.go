@@ -2,14 +2,14 @@ package container
 
 type Container struct {
 	Id        string "json:\"id\""
-	BlockId   int    "json:\"blockId\""
-	BayNum    int    "json:\"bayNum\""
-	StackNum  int    "json:\"stackNum\""
-	TierNum   int    "json:\"tierNum\""
+	BlockId   int64  "json:\"blockId\""
+	BayNum    int64  "json:\"bayNum\""
+	StackNum  int64  "json:\"stackNum\""
+	TierNum   int64  "json:\"tierNum\""
 	ArrivedAt string "json:\"arrivedAt\""
 }
 
-func NewContainer(id string, blockId int, bayNum int, stackNum int, tierNum int, arrivedAt string) *Container {
+func NewContainer(id string, blockId int64, bayNum int64, stackNum int64, tierNum int64, arrivedAt string) *Container {
 	return &Container{
 		id,
 		blockId,

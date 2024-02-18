@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -30,7 +31,7 @@ type containersHandler struct{}
 
 func (c containersHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
-		ForbiddenErrorHandler(writer, request)
+		BadRequestErrorHandler(writer, request)
 		return
 	}
 
@@ -78,7 +79,7 @@ type containersImportHandler struct{}
 
 func (c containersImportHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
-		ForbiddenErrorHandler(writer, request)
+		BadRequestErrorHandler(writer, request)
 		return
 	}
 
@@ -130,7 +131,7 @@ func (c containersImportHandler) ServeHTTP(writer http.ResponseWriter, request *
 		}
 
 		arrivedAt := data[5]
-		cont := container.NewContainer(id, int(blockId), int(bayNum), int(stackNum), int(tierNum), arrivedAt)
+		cont := container.NewContainer(id, blockId, bayNum, stackNum, tierNum, arrivedAt)
 		containers = append(containers, *cont)
 
 		if err := store.Add(id, *cont); err != nil {
@@ -162,8 +163,83 @@ func (c containersImportHandler) ServeHTTP(writer http.ResponseWriter, request *
 	}
 }
 
+type containersSearchHandle struct{}
+
+func (c containersSearchHandle) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	re, err := regexp.Compile("^/api/containers/search/[1-4](/[1-5]){0,3}$")
+	url := request.URL.String()
+
+	switch {
+	case err != nil:
+		InternalServerErrorHandler(writer, request)
+		return
+
+	case !re.MatchString(url):
+		BadRequestErrorHandler(writer, request)
+		return
+	}
+
+	slicedUrl := strings.Split(url, "/")
+	var contS []container.Container
+	var cont container.Container
+
+	switch len(slicedUrl) {
+	case 5:
+		blockId, _ := strconv.ParseInt(slicedUrl[4], 10, 32)
+		contS, err = store.GetBlock(blockId)
+		break
+
+	case 6:
+		blockId, _ := strconv.ParseInt(slicedUrl[4], 10, 32)
+		bayNum, _ := strconv.ParseInt(slicedUrl[5], 10, 32)
+		contS, err = store.GetBay(blockId, bayNum)
+		break
+
+	case 7:
+		blockId, _ := strconv.ParseInt(slicedUrl[4], 10, 32)
+		bayNum, _ := strconv.ParseInt(slicedUrl[5], 10, 32)
+		stackNum, _ := strconv.ParseInt(slicedUrl[6], 10, 32)
+		contS, err = store.GetStack(blockId, bayNum, stackNum)
+		break
+
+	case 8:
+		blockId, _ := strconv.ParseInt(slicedUrl[4], 10, 32)
+		bayNum, _ := strconv.ParseInt(slicedUrl[5], 10, 32)
+		stackNum, _ := strconv.ParseInt(slicedUrl[6], 10, 32)
+		tierNum, _ := strconv.ParseInt(slicedUrl[7], 10, 32)
+		cont, err = store.GetContainer(blockId, bayNum, stackNum, tierNum)
+		contS = append(contS, cont)
+		break
+	}
+
+	if err != nil {
+		if errors.Is(err, container.NotFoundErr) {
+			NotFoundErrorHandler(writer, request)
+		} else {
+			InternalServerErrorHandler(writer, request)
+		}
+
+		return
+	}
+
+	jsonBytes, err := json.Marshal(contS)
+
+	if err != nil {
+		InternalServerErrorHandler(writer, request)
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+
+	if _, err := writer.Write(jsonBytes); err != nil {
+		InternalServerErrorHandler(writer, request)
+		return
+	}
+}
+
 type StatResponse struct {
-	BlockId           int     "json:\"blockId\""
+	BlockId           int64   "json:\"blockId\""
 	Capacity          float64 "json:\"capacity\""
 	AverageAge        float64 "json:\"averageAge\""
 	OldestContainerId string  "json:\"oldestContainerId\""
@@ -173,7 +249,7 @@ type StatResponse struct {
 	EmptyStacks       int     "json:\"emptyStacks\""
 }
 
-func NewStatResponse(blockId int, capacity float64, averageAge float64, oldestContainerId string,
+func NewStatResponse(blockId int64, capacity float64, averageAge float64, oldestContainerId string,
 	newestContainerId string, emptyPositions int, emptyBays int, emptyStacks int) *StatResponse {
 	return &StatResponse{
 		blockId,
@@ -192,14 +268,15 @@ type blocksStatHandler struct{}
 func (b blocksStatHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	var responses []StatResponse
 
-	for blockId := 1; blockId <= 4; blockId++ {
-		currentBlock, err := store.GetByBlockId(blockId)
+	for blockId := int64(1); blockId <= 4; blockId++ {
+		currentBlock, err := store.GetBlock(blockId)
 
 		if err != nil {
 			continue
 		}
 
-		capacity, err := strconv.ParseFloat(fmt.Sprintf("%.2f", (float64(125-len(currentBlock))/125)*100), 64)
+		capacity, err := strconv.ParseFloat(fmt.Sprintf("%.2f",
+			float64(125-len(currentBlock))/float64(125)*100), 64)
 
 		if err != nil {
 			InternalServerErrorHandler(writer, request)
@@ -212,8 +289,8 @@ func (b blocksStatHandler) ServeHTTP(writer http.ResponseWriter, request *http.R
 		oldestId := currentBlock[0].Id
 		newestId := currentBlock[0].Id
 		count := 0
-		nonEmptyBays := make(map[int]int)
-		nonEmptyStacks := make(map[int]int)
+		nonEmptyBays := make(map[int64]int)
+		nonEmptyStacks := make(map[int64]int)
 
 		for _, c := range currentBlock {
 			// the error here determines if the given timestamp is unix or "normal"
@@ -295,10 +372,18 @@ func InternalServerErrorHandler(writer http.ResponseWriter, _ *http.Request) {
 	}
 }
 
-func ForbiddenErrorHandler(writer http.ResponseWriter, _ *http.Request) {
-	writer.WriteHeader(http.StatusForbidden)
+func BadRequestErrorHandler(writer http.ResponseWriter, _ *http.Request) {
+	writer.WriteHeader(http.StatusBadRequest)
 
-	if _, err := writer.Write([]byte("403 forbidden")); err != nil {
+	if _, err := writer.Write([]byte("400 bad request")); err != nil {
+		return
+	}
+}
+
+func NotFoundErrorHandler(writer http.ResponseWriter, _ *http.Request) {
+	writer.WriteHeader(http.StatusNotFound)
+
+	if _, err := writer.Write([]byte("404 not found")); err != nil {
 		return
 	}
 }
@@ -307,11 +392,9 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.Handle("/api/containers", &containersHandler{})
-	mux.Handle("/api/containers/", &containersHandler{})
 	mux.Handle("/api/containers/import", &containersImportHandler{})
-	mux.Handle("/api/containers/import/", &containersImportHandler{})
+	mux.Handle("/api/containers/search/", &containersSearchHandle{})
 	mux.Handle("/api/blocks/stat", &blocksStatHandler{})
-	mux.Handle("/api/blocks/stat/", &blocksStatHandler{})
 
 	if err := http.ListenAndServe(":3001", mux); err != nil {
 		panic(err)
