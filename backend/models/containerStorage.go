@@ -1,13 +1,13 @@
-package container
+package models
 
 import (
 	"errors"
 )
 
 var (
-	NotFoundErr      = errors.New("error: container not found")
-	AlreadyExistsErr = errors.New("error: container already exists")
-	IncorrectPosErr  = errors.New("error: incorrect container position")
+	NotFoundErr      = errors.New("error: models not found")
+	AlreadyExistsErr = errors.New("error: models already exists")
+	IncorrectPosErr  = errors.New("error: incorrect models position")
 )
 
 type ContStore struct {

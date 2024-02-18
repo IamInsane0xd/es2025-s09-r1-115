@@ -1,4 +1,4 @@
-package container
+package models
 
 type Container struct {
 	Id        string "json:\"id\""
