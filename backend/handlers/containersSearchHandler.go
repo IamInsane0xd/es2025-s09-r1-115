@@ -3,10 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"regexp"
-	"strconv"
-	"strings"
 
 	"backend/models"
 )
@@ -20,63 +19,48 @@ func NewContainersSearchHandler(store *models.ContStore) *ContainersSearchHandle
 }
 
 func (c ContainersSearchHandle) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	re, err := regexp.Compile("^/api/containers/search/[1-4](/[1-5]){0,3}$")
-	url := request.URL.String()
+	re, err := regexp.Compile(`^/api/containers/search\?[a-zA-Z]+=[a-zA-Z0-9]+(&[a-zA-Z]+=[a-zA-Z0-9]+)*$`)
 
-	switch {
-	case err != nil:
+	if err != nil {
 		InternalServerErrorHandler(writer, request)
 		return
+	}
 
-	case !re.MatchString(url):
+	if !re.MatchString(request.URL.String()) {
+		fmt.Println("1")
 		BadRequestErrorHandler(writer, request)
 		return
 	}
 
-	slicedUrl := strings.Split(url, "/")
-	var contS []models.Container
-	var cont models.Container
+	// query := utils.GetParamsFromURL(request.URL)
+	query := request.URL.Query()
 
-	switch len(slicedUrl) {
-	case 5:
-		blockId, _ := strconv.ParseInt(slicedUrl[4], 10, 32)
-		contS, err = c.store.GetBlock(blockId)
-		break
-
-	case 6:
-		blockId, _ := strconv.ParseInt(slicedUrl[4], 10, 32)
-		bayNum, _ := strconv.ParseInt(slicedUrl[5], 10, 32)
-		contS, err = c.store.GetBay(blockId, bayNum)
-		break
-
-	case 7:
-		blockId, _ := strconv.ParseInt(slicedUrl[4], 10, 32)
-		bayNum, _ := strconv.ParseInt(slicedUrl[5], 10, 32)
-		stackNum, _ := strconv.ParseInt(slicedUrl[6], 10, 32)
-		contS, err = c.store.GetStack(blockId, bayNum, stackNum)
-		break
-
-	case 8:
-		blockId, _ := strconv.ParseInt(slicedUrl[4], 10, 32)
-		bayNum, _ := strconv.ParseInt(slicedUrl[5], 10, 32)
-		stackNum, _ := strconv.ParseInt(slicedUrl[6], 10, 32)
-		tierNum, _ := strconv.ParseInt(slicedUrl[7], 10, 32)
-		cont, err = c.store.GetContainer(blockId, bayNum, stackNum, tierNum)
-		contS = append(contS, cont)
-		break
+	if !query.Has("blockId") && !query.Has("bayNum") &&
+		!query.Has("stackNum") && !query.Has("tierNum") &&
+		!query.Has("id") {
+		fmt.Println("2")
+		BadRequestErrorHandler(writer, request)
+		return
 	}
+
+	containers, err := c.store.GetByQuery(query)
 
 	if err != nil {
 		if errors.Is(err, models.NotFoundErr) {
 			NotFoundErrorHandler(writer, request)
-		} else {
-			InternalServerErrorHandler(writer, request)
+			return
+
+		} else if errors.Is(err, models.ParamError) {
+			fmt.Println("3")
+			BadRequestErrorHandler(writer, request)
+			return
 		}
 
+		InternalServerErrorHandler(writer, request)
 		return
 	}
 
-	jsonBytes, err := json.Marshal(contS)
+	jsonBytes, err := json.Marshal(containers)
 
 	if err != nil {
 		InternalServerErrorHandler(writer, request)

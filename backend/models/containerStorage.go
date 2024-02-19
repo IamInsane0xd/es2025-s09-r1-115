@@ -2,12 +2,15 @@ package models
 
 import (
 	"errors"
+	"net/url"
+	"strconv"
 )
 
 var (
-	NotFoundErr      = errors.New("error: models not found")
-	AlreadyExistsErr = errors.New("error: models already exists")
-	IncorrectPosErr  = errors.New("error: incorrect models position")
+	NotFoundErr      = errors.New("error: container not found")
+	AlreadyExistsErr = errors.New("error: container already exists")
+	IncorrectPosErr  = errors.New("error: incorrect container position")
+	ParamError       = errors.New("error: incorrect parameter value")
 )
 
 type ContStore struct {
@@ -42,6 +45,16 @@ func (c *ContStore) Add(name string, container Container) error {
 	return nil
 }
 
+func (c *ContStore) Get(id string) (Container, error) {
+	for _, val := range c.list {
+		if val.Id == id {
+			return val, nil
+		}
+	}
+
+	return Container{}, NotFoundErr
+}
+
 func (c *ContStore) GetBlock(blockId int64) ([]Container, error) {
 	var containers []Container
 
@@ -58,41 +71,50 @@ func (c *ContStore) GetBlock(blockId int64) ([]Container, error) {
 	return containers, nil
 }
 
-func (c *ContStore) GetBay(blockId int64, bayNum int64) ([]Container, error) {
-	block, err := c.GetBlock(blockId)
-
-	if err != nil {
-		return []Container{}, err
+func (c *ContStore) GetByQuery(query url.Values) ([]Container, error) {
+	if query.Has("id") {
+		container, err := c.Get(query["id"][0])
+		return []Container{container}, err
 	}
 
 	var containers []Container
+	var blockId int64
+	var bayNum int64
+	var stackNum int64
+	var tierNum int64
+	var err error
 
-	for _, val := range block {
-		if val.BayNum == bayNum {
-			containers = append(containers, val)
+	if query.Has("blockId") {
+		if blockId, err = strconv.ParseInt(query["blockId"][0], 10, 64); err != nil {
+			return []Container{}, ParamError
 		}
 	}
 
-	if len(containers) == 0 {
-		return []Container{}, err
-	}
-
-	return containers, nil
-}
-
-func (c *ContStore) GetStack(blockId int64, bayNum int64, stackNum int64) ([]Container, error) {
-	bay, err := c.GetBay(blockId, bayNum)
-
-	if err != nil {
-		return []Container{}, err
-	}
-
-	var containers []Container
-
-	for _, val := range bay {
-		if val.StackNum == stackNum {
-			containers = append(containers, val)
+	if query.Has("bayNum") {
+		if bayNum, err = strconv.ParseInt(query["bayNum"][0], 10, 64); err != nil {
+			return []Container{}, ParamError
 		}
+	}
+
+	if query.Has("stackNum") {
+		if stackNum, err = strconv.ParseInt(query["stackNum"][0], 10, 64); err != nil {
+			return []Container{}, ParamError
+		}
+	}
+
+	if query.Has("tierNum") {
+		if tierNum, err = strconv.ParseInt(query["tierNum"][0], 10, 64); err != nil {
+			return []Container{}, ParamError
+		}
+	}
+
+	for _, val := range c.list {
+		if query.Has("blockId") && (val.BlockId != blockId) || query.Has("bayNum") && (val.BayNum != bayNum) ||
+			query.Has("stackNum") && (val.StackNum != stackNum) || query.Has("tierNum") && (val.TierNum != tierNum) {
+			continue
+		}
+
+		containers = append(containers, val)
 	}
 
 	if len(containers) == 0 {
@@ -100,24 +122,4 @@ func (c *ContStore) GetStack(blockId int64, bayNum int64, stackNum int64) ([]Con
 	}
 
 	return containers, nil
-}
-
-func (c *ContStore) GetContainer(blockId int64, bayNum int64, stackNum int64, tierNum int64) (Container, error) {
-	stack, err := c.GetStack(blockId, bayNum, stackNum)
-
-	if err != nil {
-		return Container{}, err
-	}
-
-	for _, val := range stack {
-		if val.TierNum == tierNum {
-			return val, nil
-		}
-	}
-
-	return Container{}, NotFoundErr
-}
-
-func (c *ContStore) List() map[string]Container {
-	return c.list
 }

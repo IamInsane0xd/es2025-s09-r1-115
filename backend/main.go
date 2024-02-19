@@ -16,7 +16,7 @@ func main() {
 
 	mux.Handle("/api/containers", handlers.NewContainersHandler(store))
 	mux.Handle("/api/containers/import", handlers.NewContainersImportHandler(store))
-	mux.Handle("/api/containers/search/", handlers.NewContainersSearchHandler(store))
+	mux.Handle("/api/containers/search", handlers.NewContainersSearchHandler(store))
 	mux.Handle("/api/blocks/stat", handlers.NewBlocksStatHandler(store))
 
 	if err := http.ListenAndServe(":3001", mux); err != nil {
