@@ -19,7 +19,7 @@ Queries that can be used:
 Example: 
 ```http request
 ###
-GET localhost:3001/api/containers/search?bayNum=5&tierNum=5&blockId=1
+GET http://localhost:3001/api/containers/search?bayNum=5&tierNum=5&blockId=1
 
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -44,8 +44,8 @@ Content-Length: 217
   }
 ]
 
-### Here the blockId is ignored, because we provided it with an unique ID
-GET localhost:3001/api/containers/search?blockId=1&id=UEKP3858709
+###
+GET http://localhost:3001/api/containers/search?blockId=1&id=UEKP3858709
 
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -62,8 +62,8 @@ Content-Length: 109
     }
 ]
 
-### Bad request, because no query was provided
-GET localhost:3001/api/containers/search
+###
+GET http://localhost:3001/api/containers/search
 
 HTTP/1.1 400 Bad Request
 Content-Length: 15
