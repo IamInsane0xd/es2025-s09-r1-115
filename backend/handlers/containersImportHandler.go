@@ -96,6 +96,7 @@ func (c ContainersImportHandler) ServeHTTP(writer http.ResponseWriter, request *
 		return
 	}
 
+	writer.Header().Set("Access-Control-Allow-Origin", "*")
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusOK)
 

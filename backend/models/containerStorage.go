@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -72,12 +73,29 @@ func (c *ContStore) GetBlock(blockId int64) ([]Container, error) {
 }
 
 func (c *ContStore) GetByQuery(query url.Values) ([]Container, error) {
+	var containers []Container
+
 	if query.Has("id") {
-		container, err := c.Get(query["id"][0])
-		return []Container{container}, err
+		if len(query["id"][0]) == 11 {
+			container, err := c.Get(query["id"][0])
+			return []Container{container}, err
+		}
+
+		for _, val := range c.list {
+			if !strings.Contains(val.Id, query["id"][0]) {
+				continue
+			}
+
+			containers = append(containers, val)
+		}
+
+		if len(containers) == 0 {
+			return []Container{}, NotFoundErr
+		}
+
+		return containers, nil
 	}
 
-	var containers []Container
 	var blockId int64
 	var bayNum int64
 	var stackNum int64
