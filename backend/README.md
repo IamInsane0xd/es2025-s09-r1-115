@@ -72,6 +72,4 @@ Content-Type: text/plain; charset=utf-8
 400 bad request
 ```
 
----
-
 [^1]: If the id query is found, the others will be ignored
