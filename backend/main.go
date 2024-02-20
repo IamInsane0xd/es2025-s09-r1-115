@@ -14,6 +14,8 @@ var (
 )
 
 func main() {
+	fmt.Println("Importing containers from json server!")
+
 	res, err := http.Get("http://localhost:3000/containers")
 
 	if err != nil {
@@ -32,7 +34,7 @@ func main() {
 		}
 	}
 
-	fmt.Println("Containers imported, creating mux!")
+	fmt.Println("Creating mux!")
 
 	mux := http.NewServeMux()
 
@@ -41,7 +43,7 @@ func main() {
 	mux.Handle("/api/containers/search", handlers.NewContainersSearchHandler(store))
 	mux.Handle("/api/blocks/stat", handlers.NewBlocksStatHandler(store))
 
-	fmt.Println("Mux created, starting server!")
+	fmt.Println("Starting server!")
 
 	if err = http.ListenAndServe(":3001", mux); err != nil {
 		panic(err)
