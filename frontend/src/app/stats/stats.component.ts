@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {NgForOf, NgIf} from "@angular/common";
+import {YardComponent} from "./yard/yard.component";
 
 type Stats = {
   blockId: number,
@@ -19,6 +20,7 @@ type Stats = {
   imports: [
     NgIf,
     NgForOf,
+    YardComponent,
   ],
   templateUrl: './stats.component.html',
   styleUrl: './stats.component.less'

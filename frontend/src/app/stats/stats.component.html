@@ -1,9 +1,11 @@
 <div id="stats">
+  <app-yard *ngIf="!showErr"></app-yard>
+  <hr>
   <div *ngIf="!showErr" id="blocks">
     <div *ngFor="let stat of stats" class="block">
       Block ID: {{stat.blockId}}<br>
       Capacity: {{stat.capacity}}% free<br>
-      Average Aga: {{stat.averageAge}} days<br>
+      Average Age: {{stat.averageAge}} days<br>
       Oldest Container ID: {{stat.oldestContainerId}}<br>
       Newest Container ID: {{stat.newestContainerId}}<br>
       Empty Positions: {{stat.emptyPositions}}<br>

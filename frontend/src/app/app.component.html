@@ -1,7 +1,7 @@
 <div id="app">
-  <nav>
-    <button (click)="switchPage(0)">Statistics</button>
-    <button (click)="switchPage(1)">Search</button>
+  <nav id="navbar">
+    <button (click)="switchPage(0)" class="navbar-button">Statistics</button>
+    <button (click)="switchPage(1)" class="navbar-button">Search</button>
   </nav>
   <app-stats *ngIf="currentPage === 0"></app-stats>
   <app-search *ngIf="currentPage === 1"></app-search>

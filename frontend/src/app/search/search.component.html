@@ -1,1 +1,45 @@
-<p>search works!</p>
+<div id="search">
+  <form (submit)="search()" action="#" id="search-form">
+    <span>
+      <label for="form-id">Container ID: </label>
+      <input id="form-id" class="form-input" type="text">
+    </span>
+    <span>
+      <label for="form-block-id">Block ID: </label>
+      <input id="form-block-id" class="form-input" max="4" min="0" name="BlockId" required type="number" value="0">
+    </span>
+    <span>
+      <label for="form-bay-num">Bay Num: </label>
+      <input id="form-bay-num" class="form-input" max="5" min="0" name="BayNum" required type="number" value="0">
+    </span>
+    <span>
+      <label for="form-stack-num">Stack Num: </label>
+      <input id="form-stack-num" class="form-input" max="5" min="0" name="StackNum" required type="number" value="0">
+    </span>
+    <span>
+      <label for="form-tier-num">Tier Num: </label>
+      <input id="form-tier-num" class="form-input" max="5" min="0" name="TierNum" required type="number" value="0">
+    </span>
+    <span>
+      <label for="form-sort-by">Sort By: </label>
+      <select id="form-sort-by" class="form-input" name="form-sort-by">
+        <option class="sort-by-option" value="none">None</option>
+        <option class="sort-by-option" value="blockId">Block ID</option>
+        <option class="sort-by-option" value="bayNum">Bay Num</option>
+        <option class="sort-by-option" value="stackNum">Stack Num</option>
+        <option class="sort-by-option" value="tierNum">Tier Num</option>
+      </select>
+    </span>
+  </form>
+  <div *ngIf="!showErr" id="search-results">
+    <div *ngFor="let container of searchResult" class="container">
+      Id: {{container.id}}<br>
+      BlockId: {{container.blockId}}<br>
+      BayNum: {{container.bayNum}}<br>
+      StackNum: {{container.stackNum}}<br>
+      TierNum: {{container.tierNum}}<br>
+      Arrived at: {{container.arrivedAt}}<br>
+    </div>
+  </div>
+  <p *ngIf="showErr" id="error-msg">{{errorMsg}}</p>
+</div>

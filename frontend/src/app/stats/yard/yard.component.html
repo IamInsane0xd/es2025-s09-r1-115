@@ -1,0 +1,18 @@
+<div id="yard">
+  <div id="yard-buttons">
+    <button (click)="switchBlock(1)" class="yard-button">Block 1</button>
+    <button (click)="switchBlock(2)" class="yard-button">Block 2</button>
+    <button (click)="switchBlock(3)" class="yard-button">Block 3</button>
+    <button (click)="switchBlock(4)" class="yard-button">Block 4</button>
+  </div>
+  <div id="block-1" class="block">
+    <div *ngFor="let i of tierLoop" class="tier">
+      <div *ngFor="let j of bayLoop" class="bay">
+        <div *ngFor="let k of stackLoop" class="stack">
+          <div *ngIf="checkContainer(currentBlock, j, i, k)" class="yes" [title]="'Tier: ' + i + ' Bay: ' + j + ' Stack: ' + k"></div>
+          <div *ngIf="!checkContainer(currentBlock, j, i, k)" class="no" [title]="'Tier: ' + i + ' Bay: ' + j + ' Stack: ' + k"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

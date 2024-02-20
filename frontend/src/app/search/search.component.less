@@ -1,0 +1,46 @@
+#search {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  height: calc(100% - 50px);
+
+  #search-form {
+    margin-right: 10px;
+    width: 17%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 10px;
+    background-color: darken(#d3d3d3, 5%);
+
+    span {
+      margin-bottom: 10px;
+
+      label {
+        font-size: 13px;
+      }
+    }
+  }
+
+  #search-results {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 83%;
+    overflow: scroll;
+
+    .container {
+      margin: 10px 20px 10px 10px;
+      padding: 10px;
+      width: calc(100% - 30px);
+      background-color: darken(#d3d3d3, 5%);
+    }
+  }
+
+  #error-msg {
+    color: red;
+    font-size: 20px;
+    padding: 30px;
+  }
+}
