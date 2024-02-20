@@ -3,11 +3,12 @@
 ### GET /api/containers/search
 Can be used to filter through the containers using queries.<br>
 <br>
-If no query is provided, or a query contains malformed data (for example `?blockId=apple`), the endpoint will respond
+If a query contains malformed data (for example `?blockId=apple`), the endpoint will respond
 with a `400 bad request`.<br>
 If no container was found with the given criteria, the endpoint will respond with a `404 not found` error.<br>
 If the query succeeded, the response will contain a list of containers matching the given
 query.<br>
+If no query is provided, it will return all the stored containers.<br>
 <br>
 Queries that can be used:
   - blockId
@@ -15,6 +16,7 @@ Queries that can be used:
   - stackNum
   - tierNum
   - id[^1]
+  - sortBy (accepted values: `blockId`, `bayNum`, `stackNum`, `tierNum`,)
 
 Example: 
 ```http request

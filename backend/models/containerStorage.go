@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -75,6 +76,18 @@ func (c *ContStore) GetBlock(blockId int64) ([]Container, error) {
 func (c *ContStore) GetByQuery(query url.Values) ([]Container, error) {
 	var containers []Container
 
+	if len(query) == 0 || (len(query) == 1 && query.Has("sortBy")) {
+		for _, val := range c.list {
+			containers = append(containers, val)
+		}
+
+		if query.Has("sortBy") {
+			containers = sortContainers(query, containers)
+		}
+
+		return containers, nil
+	}
+
 	if query.Has("id") {
 		if len(query["id"][0]) == 11 {
 			container, err := c.Get(query["id"][0])
@@ -139,5 +152,31 @@ func (c *ContStore) GetByQuery(query url.Values) ([]Container, error) {
 		return []Container{}, NotFoundErr
 	}
 
+	if query.Has("sortBy") {
+		containers = sortContainers(query, containers)
+	}
+
 	return containers, nil
+}
+
+func sortContainers(query url.Values, containers []Container) []Container {
+	switch query["sortBy"][0] {
+	case "blockId":
+		sort.Slice(containers, func(i, j int) bool { return containers[i].BlockId < containers[j].BlockId })
+		break
+
+	case "bayNum":
+		sort.Slice(containers, func(i, j int) bool { return containers[i].BayNum < containers[j].BayNum })
+		break
+
+	case "stackNum":
+		sort.Slice(containers, func(i, j int) bool { return containers[i].StackNum < containers[j].StackNum })
+		break
+
+	case "tierNum":
+		sort.Slice(containers, func(i, j int) bool { return containers[i].TierNum < containers[j].TierNum })
+		break
+	}
+
+	return containers
 }
