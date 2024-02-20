@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"regexp"
 
@@ -27,7 +26,6 @@ func (c ContainersSearchHandle) ServeHTTP(writer http.ResponseWriter, request *h
 	}
 
 	if !re.MatchString(request.URL.String()) {
-		fmt.Println("1")
 		BadRequestErrorHandler(writer, request)
 		return
 	}
@@ -38,7 +36,6 @@ func (c ContainersSearchHandle) ServeHTTP(writer http.ResponseWriter, request *h
 	if !query.Has("blockId") && !query.Has("bayNum") &&
 		!query.Has("stackNum") && !query.Has("tierNum") &&
 		!query.Has("id") {
-		fmt.Println("2")
 		BadRequestErrorHandler(writer, request)
 		return
 	}
@@ -51,7 +48,6 @@ func (c ContainersSearchHandle) ServeHTTP(writer http.ResponseWriter, request *h
 			return
 
 		} else if errors.Is(err, models.ParamError) {
-			fmt.Println("3")
 			BadRequestErrorHandler(writer, request)
 			return
 		}
